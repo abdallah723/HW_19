@@ -1,26 +1,48 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import Table from "./components/Table"
+import Header from "./components/Header"
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+class App extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      employees: []
+    }
+    console.log("constructed")
+  }
+
+
+  componentDidMount(){
+    console.log("employees db")
+    fetch("https://alper.dev/employees")
+      .then(response => {
+        return response.json()
+      })
+      .then(res => {
+        this.setState({employees: res })
+      })
+    }
+
+render() {
+  console.log(this.state.employees)
+  if(!this.state.employees[0]) {
+    return (
+      <>
+        <Header />
+        <h3>Loading...</h3>
+      </>
+    )
+  }else {
+    return (
+    <>
+      <Header />
+      <div className="container">
+        <Table employees={this.state.employees} />
+      </div>
+    </>
+    )
+  }
 }
-
+}
 export default App;
